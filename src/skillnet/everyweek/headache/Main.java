@@ -32,7 +32,8 @@ public class Main {
                 workbookFiles.add(file);
             }
         }
-        ReadFile.readFile(workbookFiles);
+        ReadFile readFile =new ReadFile();
+        readFile.readFile(workbookFiles);
 
     }
 }
