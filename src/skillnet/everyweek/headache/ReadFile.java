@@ -1,6 +1,7 @@
 package skillnet.everyweek.headache;
 
 import com.opencsv.CSVReader;
+import jdk.nashorn.internal.runtime.PropertyMap;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,6 +27,8 @@ public class ReadFile {
     List<TotalTime> totalTimes;
     Map<String, Object> data;
     String numberOfProject[];
+    List<String> nameOfProjects;
+    Map<String, String> projectWithRespectiveTime;
     public void readFile(List workbookFiles){
         String file = (String)workbookFiles.get(0);
         try {
@@ -178,8 +181,12 @@ public class ReadFile {
     }
 
     public void sumUp(){
-        int numberOfProjects=0;
-        Iterator iterator = data.entrySet().iterator();
+        int numberOfProjects=1;
+        nameOfProjects = new ArrayList<>();
+        Map<String, Object> tempData = data;
+        Map<String, Object> temporaryData = data;
+        Iterator iterator = tempData.entrySet().iterator();
+        projectWithRespectiveTime = new HashMap<>();
         while(iterator.hasNext()){
             Map.Entry keyValue = (Map.Entry)iterator.next();
             if(keyValue.getKey().equals(GlobalResources.PROJECT_NAME)){
@@ -187,10 +194,34 @@ public class ReadFile {
                 for(int i=0; i<tempList.size(); i++){
                     if(i != 0)break;
                     for(int j=0; j<tempList.size(); j++){
-                        if(!tempList.get(i).getProjectName().equals(tempList.get(j).getProjectName()))numberOfProjects++;
+                        if(!tempList.get(i).getProjectName().equals(tempList.get(j).getProjectName())){
+                            if(numberOfProjects == 1)nameOfProjects.add(tempList.get(i).getProjectName());
+                            numberOfProjects++;
+                            nameOfProjects.add(tempList.get(j).getProjectName());
+                        }
                     }
                 }
             }
+//            iterator.remove();
         }
+// And here even my soul doesn't know what the f*** I did, Total time waste but worth ever keystroke
+        Map<String, String> nayaMap = new HashMap<>();
+        for(String entry: data.keySet()){
+            if(entry.equals(GlobalResources.PROJECT_NAME)){
+                if(!nayaMap.containsKey(entry)){
+                    ArrayList<ProjectName> o = (ArrayList)data.get(entry);
+                    for(ProjectName projectName: o){
+                        nayaMap.put(projectName.getProjectName(), null);
+                    }
+                }
+                System.out.println();
+
+            }
+        }
+
+        for(String s: nayaMap.keySet()){
+            for()
+        }
+
     }
 }
